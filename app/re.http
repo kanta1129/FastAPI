@@ -1,0 +1,9 @@
+
+GET  http://localhost:3000/info/
+
+
+GET  http://localhost:3000/info/?item=apple
+
+
+GET  http://localhost:3000/hello/Taro
+
