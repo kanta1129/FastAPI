@@ -1,6 +1,7 @@
 from typing import Optional
-from fastapi import FastAPI
-from pydantic import BaseModel
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel, EmailStr, constr, conint
+import time
 
 app = FastAPI()
 
@@ -10,8 +11,30 @@ class Item(BaseModel):
     price: float
     is_offer: Optional[bool]=None #オプション属性(省略可)
 @app.post("/items/")
-async def create_item(irem: Item): #リクエストボディとしてItemモデルを受け取る
-    return irem
+async def create_item(item: Item): #リクエストボディとしてItemモデルを受け取る
+    return item
+
+#演習課題１
+class UserCreate(BaseModel):
+    username: constr(min_length=3,max_length=15)#文字列長制限
+    email: EmailStr#Eメール形式
+    password: constr(min_length=8)
+    full_name: Optional[str]=None
+    disabled: bool=False
+
+class MessageCreate(BaseModel):
+    sender_id: conint(ge=0)#０以上の整数
+    room_id: conint(ge=0)
+    test: constr(min_length=1, max_length=1000)
+    timestamp: Optional[float]=time.time()#デフォルトは現在時刻
+
+@app.post("/users/")
+async def create_User(user: UserCreate):
+    return {"message": "user created succesfully", "user_data":user}
+
+@app.post("/messages/")
+async def create_email(email: MessageCreate):
+    return {"messsage": "email created successfully", "email_data": email}
 
 @app.get("/")
 async def read_root():
