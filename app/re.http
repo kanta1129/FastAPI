@@ -1,2 +1,8 @@
 
-POST  http://localhost:3000/items/
+POST  http://localhost:3000/users
+
+{
+  "username": "ab",
+  "email": "john@example.com", 
+  "password": "strongpassword"
+}
